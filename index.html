@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>HD Статус</title>
+<meta name="description" content="Фото и видео для статуса WhatsApp без потери качества">
+<meta name="robots" content="noindex">
+<style>
+  html,body{margin:0;height:100%;background:#f4efe6;color:#1a1a1a;font:16px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
+  main{min-height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px;box-sizing:border-box}
+  .dot{width:36px;height:36px;border-radius:50%;border:3px solid #cfc6b6;border-top-color:#2fb562;animation:s .8s linear infinite;margin-bottom:16px}
+  @keyframes s{to{transform:rotate(360deg)}}
+  a.btn{display:block;width:260px;margin:8px auto;padding:13px;border-radius:12px;background:#1a1a1a;color:#fff;text-decoration:none;font-weight:600}
+  a.btn.alt{background:#fff;color:#1a1a1a;border:1px solid #d9d0c2}
+  .muted{color:#7a7266;font-size:14px}
+  #fail{display:none}
+</style>
+</head>
+<body>
+<main>
+  <div id="wait"><div class="dot" style="margin:0 auto 16px"></div><b>HD Статус</b><div class="muted">Открываю сайт…</div></div>
+  <div id="fail">
+    <b>Сайт не открылся</b>
+    <p class="muted">Попробуйте адреса ниже или пользуйтесь Telegram-ботом.</p>
+    <a class="btn" id="l1" href="https://hdstatus.netlify.app">Открыть сайт</a>
+    <a class="btn alt" id="l2" href="https://hdstatus.taileea0b8.ts.net">Запасной адрес</a>
+    <a class="btn alt" href="https://t.me/avibra_hdstatus_bot">Telegram-бот</a>
+  </div>
+</main>
+<script>
+/* Умная ссылка HD Статус: проверяет оба адреса сайта и открывает тот, что работает у человека.
+   Netlify — основной (в России открывается надёжнее; оттуда сайт сам переходит на прямой, если тот доступен).
+   Прямой адрес — если Netlify у человека заблокирован (например, в Египте). Метки ссылок (?s=, ?r=, #…) сохраняются. */
+var N = "https://hdstatus.netlify.app", D = "https://hdstatus.taileea0b8.ts.net";
+var tail = location.search + location.hash, n = null, d = null, gone = false;
+document.getElementById("l1").href = N + tail;
+document.getElementById("l2").href = D + tail;
+function go(base) { if (!gone) { gone = true; location.replace(base + "/" + tail); } }
+function decide() {
+  if (n === true) return go(N);
+  if (n === false && d === true) return go(D);
+  if (n === false && d === false) { document.getElementById("wait").style.display = "none"; document.getElementById("fail").style.display = "block"; }
+}
+function probe(base, ms, done) {
+  var img = new Image(), fin = false, t;
+  function end(ok) { if (!fin) { fin = true; clearTimeout(t); done(ok); } }
+  img.onload = function () { end(true); }; img.onerror = function () { end(false); };
+  t = setTimeout(function () { end(false); }, ms);
+  img.src = base + "/static/icons/icon-192.png?p=" + Date.now();
+}
+probe(N, 5000, function (ok) { n = ok; decide(); });
+probe(D, 7000, function (ok) {
+  d = ok; decide();
+  if (ok) setTimeout(function () { if (n !== true) go(D); }, 1500);  // прямой ответил, а Netlify молчит — не ждём
+});
+</script>
+</body>
+</html>
