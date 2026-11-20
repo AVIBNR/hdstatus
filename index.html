@@ -23,16 +23,15 @@
   <div id="fail">
     <b>Сайт не открылся</b>
     <p class="muted">Попробуйте адреса ниже или пользуйтесь Telegram-ботом.</p>
-    <a class="btn" id="l1" href="https://hdstatus.netlify.app">Открыть сайт</a>
+    <a class="btn" id="l1" href="https://hdstatus.77-221-148-85.sslip.io">Открыть сайт</a>
     <a class="btn alt" id="l2" href="https://hdstatus.taileea0b8.ts.net">Запасной адрес</a>
     <a class="btn alt" href="https://t.me/avibra_hdstatus_bot">Telegram-бот</a>
   </div>
 </main>
 <script>
 /* Умная ссылка HD Статус: проверяет оба адреса сайта и открывает тот, что работает у человека.
-   Netlify — основной (в России открывается надёжнее; оттуда сайт сам переходит на прямой, если тот доступен).
-   Прямой адрес — если Netlify у человека заблокирован (например, в Египте). Метки ссылок (?s=, ?r=, #…) сохраняются. */
-var N = "https://hdstatus.netlify.app", D = "https://hdstatus.taileea0b8.ts.net";
+   Основной (N) — через сервер в Амстердаме (с 20.11, Netlify отключён по лимиту). Запасной (D) — Tailscale напрямую на Mac. Метки ссылок (?s=, ?r=, #…) сохраняются. */
+var N = "https://hdstatus.77-221-148-85.sslip.io", D = "https://hdstatus.taileea0b8.ts.net";
 var tail = location.search + location.hash, n = null, d = null, gone = false;
 document.getElementById("l1").href = N + tail;
 document.getElementById("l2").href = D + tail;
